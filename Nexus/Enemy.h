@@ -73,6 +73,15 @@ public:
 	UPROPERTY(EditAnywhere)
 		float DamageValue = 5.0f;
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UAnimMontage* DeathAnimation;
+
+	class UAnimInstance* AnimInstance;
+
 public:
+
+
+
 	void DealDamage(float DamageAmount);
 };

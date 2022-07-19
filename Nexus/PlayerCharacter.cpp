@@ -150,3 +150,18 @@ void APlayerCharacter::LookUp(float rate)
 	AddControllerPitchInput(rate * TurnRate * GetWorld()->GetDeltaSeconds());
 }
 
+void APlayerCharacter::DealDamage(float DamageAmount)
+{
+	Health -= DamageAmount;
+
+	if (Health <= 0.0f) 
+	{
+		// restart game
+		if (DeathAnimation != NULL && AnimInstance != NULL) {
+			AnimInstance->Montage_Play(DeathAnimation, 1.0f);
+		}
+
+		Destroy();
+	}
+}
+

@@ -21,9 +21,12 @@ AEnemy::AEnemy()
 	AIPerComp = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception Component"));
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 
+	// Enemy Field of View
 	SightConfig->SightRadius = 1250.0f;
 	SightConfig->LoseSightRadius = 1280.0f;
 	SightConfig->PeripheralVisionAngleDegrees = 90.0f;
+
+	// Can Detect All
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -40,6 +43,7 @@ AEnemy::AEnemy()
 
 	DistanceSquared = BIG_NUMBER;
 
+	
 
 }
 
@@ -51,6 +55,8 @@ void AEnemy::BeginPlay()
 	DamageCollision->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnHit);
 
 	BaseLocation = this->GetActorLocation();
+
+	
 }
 
 // Called every frame
@@ -92,6 +98,13 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
+	APlayerCharacter* Char = Cast<APlayerCharacter>(OtherActor);
+	 
+
+	if (Char)
+	{
+		Char->DealDamage(DamageValue);
+	}
 
 }
 
@@ -153,5 +166,12 @@ void AEnemy::SetNewRotation(FVector TargetPosition, FVector CurrentPosition)
 
 void AEnemy::DealDamage(float DamageAmount)
 {
+	Health -= DamageAmount;
+
+	if (Health <= 0.0f)
+	{
+		// TODO: Death Animation
+		Destroy();
+	}
 }
 

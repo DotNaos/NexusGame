@@ -79,4 +79,15 @@ public:
 	FRotator SpawnRotation;
 	FVector SpawnLocation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float Health = 100.0f;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UAnimMontage* DeathAnimation;
+
+	void DealDamage(float DamageAmount);
+
+	
+
 };
