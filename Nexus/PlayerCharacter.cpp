@@ -14,6 +14,8 @@
 #include "NexusGameMode.h"
 
 
+
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -64,8 +66,9 @@ void APlayerCharacter::BeginPlay()
 		FAttachmentTransformRules::SnapToTargetIncludingScale,
 		TEXT("GripPoint"));
 	World = GetWorld();
-
+	 
 	AnimInstance = HandsMesh->GetAnimInstance();
+
 
 }
 
@@ -85,6 +88,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &APlayerCharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &APlayerCharacter::OnFire);
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &APlayerCharacter::SprintStart);
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &APlayerCharacter::SprintEnd);
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerCharacter::MoveRight);
@@ -129,7 +134,10 @@ void APlayerCharacter::MoveForward(float axisValue)
 	// On Input
 	if (axisValue != 0.0f) 
 	{
-		AddMovementInput(GetActorForwardVector(), axisValue);
+		
+
+
+		AddMovementInput(GetActorForwardVector() * axisValue);
 	}
 
 }
@@ -153,14 +161,32 @@ void APlayerCharacter::LookUp(float rate)
 	AddControllerPitchInput(rate * TurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void APlayerCharacter::DealDamage(float DamageAmount)
+void APlayerCharacter::SprintStart()
 {
+	movementSpeed = 5.5f;
+
+}
+
+void APlayerCharacter::SprintEnd()
+{
+	movementSpeed = 1.0f; 
+}
+
+
+void APlayerCharacter::DealDamage(float DamageAmount, FRotator KnockBackDir, float STRENGTH)
+{ 
+	
 	Health -= DamageAmount;
+	
 
-	if (Health <= 0.0f) 
+	//if (GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Knockback"));
+  
+
+	if (Health <= 0.0f)  
 	{
-		// restart game 
-
+		// restart game  
+		
 		
 			/*if (DeathAnimation != NULL && AnimInstance != NULL) {
 				AnimInstance->Montage_Play(DeathAnimation, 1.0f);

@@ -72,9 +72,21 @@ public:
 	UPROPERTY(EditAnywhere)
 		float DamageValue = 5.0f;
 
+
+	UPROPERTY(EditAnywhere)
+		bool isAlive = true;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UAnimMontage* DeathAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UAnimMontage* PunchAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UAnimMontage* DamageAnimation;
+
+
 
 	class UAnimInstance* AnimInstance;
 

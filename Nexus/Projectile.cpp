@@ -11,6 +11,11 @@
 
 #include "UObject/ConstructorHelpers.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+ 
+
+ 
 //#include "Components/SphereComponent.h" 
 
 // Sets default values
@@ -24,6 +29,7 @@ AProjectile::AProjectile()
 	//CollisionSphere->SetCollisionProfileName(TEXT("Pawn"));
 	//RootComponent = CollisionSphere; 
 	
+
 	 
 	 
 
@@ -34,9 +40,10 @@ AProjectile::AProjectile()
 	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
-
+	
 	InitialLifeSpan = 3.0f;
-
+	
+	
 }
 
 
@@ -59,14 +66,19 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Damage To Enemy"));
+	//if(GEngine)
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Damage To Enemy"));
+
+
+	//UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(OtherActor->GetRootComponent());
+	//MeshComponent->AddImpulse(GetActorForwardVector() * 10.0f);
+
 
 	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
 	if (Enemy)
 	{
 		Enemy->DealDamage(DamageValue);
-
+		
 		Destroy();
 	}
 

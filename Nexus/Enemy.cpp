@@ -25,11 +25,11 @@ AEnemy::AEnemy()
 	// Enemy Field of View
 	SightConfig->SightRadius = 1250.0f;
 	SightConfig->LoseSightRadius = 1280.0f;
-	SightConfig->PeripheralVisionAngleDegrees = 90.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 120.0f;
 
 	// Can Detect All
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;  
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 
 	// forget Enemy after 0,1sek
@@ -40,7 +40,7 @@ AEnemy::AEnemy()
 	AIPerComp->OnPerceptionUpdated.AddDynamic(this, &AEnemy::OnSensed);
 
 	CurrentVelocity = FVector::ZeroVector;
-	MovementSpeed = 375.0f;
+	MovementSpeed = 200.0f;
 
 	DistanceSquared = BIG_NUMBER;
 
@@ -66,7 +66,7 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!CurrentVelocity.IsZero() && followSensed) 
+	if (!CurrentVelocity.IsZero() && followSensed && isAlive)
 	{
 		NewLocation = GetActorLocation() + CurrentVelocity * DeltaTime;
 
@@ -105,12 +105,12 @@ void AEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	APlayerCharacter* Char = Cast<APlayerCharacter>(OtherActor);
 	
 
-	if (Char)
+	if (Char && isAlive)
 	{
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Damage to Player!"));
+		//if (GEngine)
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Damage to Player!"));
 
-		Char->DealDamage(DamageValue); 
+		Char->DealDamage(DamageValue, EnemyRotation, 100);
 	}
 
 }
@@ -178,7 +178,16 @@ void AEnemy::DealDamage(float DamageAmount)
 	if (Health <= 0.0f)
 	{
 		// TODO: Death Animation
-		Destroy();
-	}
+		//Destroy();
+		isAlive = false; 
+		DisableInput(GetWorld()->GetFirstPlayerController());
+		
+		GetMesh()->SetSimulatePhysics(true);
+		GetMesh()->SetPhysicsBlendWeight(1.0);
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		DamageCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision); 
+		
+		
+	}  
 }
 

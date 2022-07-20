@@ -45,6 +45,5 @@ public:
 	UPROPERTY(EditAnywhere)
 		float DamageValue = 20.0f;
 
-	UPROPERTY()
-		class UParticleSystemComponent* OurParticleSystem;
+
 };

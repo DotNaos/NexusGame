@@ -29,10 +29,10 @@ public:
 
 
 public:
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 		class USkeletalMeshComponent* HandsMesh;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 		class USkeletalMeshComponent* GunMesh;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
@@ -60,6 +60,11 @@ protected:
 	void Turn(float rate);
 	void LookUp(float rate);
 
+	float movementSpeed = 1.0f;
+	void SprintStart();
+	void SprintEnd();
+
+
 public: 
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 		TSubclassOf<class AProjectile> Projectile;
@@ -86,7 +91,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UAnimMontage* DeathAnimation;
 
-	void DealDamage(float DamageAmount);
+
+
+	void DealDamage(float DamageAmount, FRotator KnockBackDir, float STRENGTH);
 
 	 
 
