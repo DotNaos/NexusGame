@@ -88,6 +88,6 @@ public:
 
 	void DealDamage(float DamageAmount);
 
-	
+	 
 
 };

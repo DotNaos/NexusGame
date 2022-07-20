@@ -23,8 +23,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	
+
+	
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		class USphereComponent* CollisionSphere;
+	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
 		class UProjectileMovementComponent* ProjectileMovement;
@@ -40,4 +44,7 @@ public:
 		);
 	UPROPERTY(EditAnywhere)
 		float DamageValue = 20.0f;
+
+	UPROPERTY()
+		class UParticleSystemComponent* OurParticleSystem;
 };

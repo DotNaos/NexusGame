@@ -27,15 +27,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		class UBoxComponent* DamageCollision;
+		class UBoxComponent* DamageCollision; 
 
 	UFUNCTION()
-		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp,
-			int32 OtherBodyIndex,
-			bool bFromSweep,
-			const FHitResult& Hit
-		);
+		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool bFromSweep,const FHitResult& Hit);
+	
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Enemy)
 		class UAIPerceptionComponent* AIPerComp;
@@ -45,6 +41,9 @@ public:
 
 	UFUNCTION()
 		void OnSensed(const TArray<AActor*>& UpdatedActors);
+
+	UPROPERTY(EditAnywhere, Category = Movement)
+		bool followSensed; 
 
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		FRotator EnemyRotation;
@@ -58,7 +57,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
 		FVector CurrentVelocity;
 
-	UPROPERTY(VisibleAnywhere, Category = Movement)
+	UPROPERTY(VisibleAnywhere, Category = Movement) 
 		float MovementSpeed;
 
 	void SetNewRotation(FVector TargetPosition, FVector CurrentPosition);

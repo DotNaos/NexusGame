@@ -7,6 +7,8 @@
 #include "PlayerCharacter.h" 
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Engine/Engine.h"
+ 
 
 // Sets default values
 AEnemy::AEnemy() 
@@ -14,9 +16,8 @@ AEnemy::AEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	DamageCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Damage Collision"));
+	DamageCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	DamageCollision->SetupAttachment(RootComponent);
-
 
 	AIPerComp = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception Component"));
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
@@ -50,10 +51,11 @@ AEnemy::AEnemy()
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
+
 	Super::BeginPlay();
 
 	DamageCollision->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnHit);
-
+	 
 	BaseLocation = this->GetActorLocation();
 
 	
@@ -64,7 +66,7 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!CurrentVelocity.IsZero()) 
+	if (!CurrentVelocity.IsZero() && followSensed) 
 	{
 		NewLocation = GetActorLocation() + CurrentVelocity * DeltaTime;
 
@@ -96,14 +98,19 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
+void AEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
+
 	APlayerCharacter* Char = Cast<APlayerCharacter>(OtherActor);
-	 
+	
 
 	if (Char)
 	{
-		Char->DealDamage(DamageValue);
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Damage to Player!"));
+
+		Char->DealDamage(DamageValue); 
 	}
 
 }

@@ -74,6 +74,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
+
 }
 
 // Called to bind functionality to input
@@ -92,6 +94,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::OnFire()
 {
+
 	if (World != NULL) {
 
 
@@ -156,10 +159,12 @@ void APlayerCharacter::DealDamage(float DamageAmount)
 
 	if (Health <= 0.0f) 
 	{
-		// restart game
-		if (DeathAnimation != NULL && AnimInstance != NULL) {
-			AnimInstance->Montage_Play(DeathAnimation, 1.0f);
-		}
+		// restart game 
+
+		
+			/*if (DeathAnimation != NULL && AnimInstance != NULL) {
+				AnimInstance->Montage_Play(DeathAnimation, 1.0f);
+			}*/
 
 		Destroy();
 	}

@@ -8,6 +8,11 @@
 
 #include "Enemy.h"
 
+
+#include "UObject/ConstructorHelpers.h"
+#include "Particles/ParticleSystemComponent.h"
+//#include "Components/SphereComponent.h" 
+
 // Sets default values
 AProjectile::AProjectile()
 {
@@ -16,20 +21,26 @@ AProjectile::AProjectile()
 
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collision"));
 	CollisionSphere->InitSphereRadius(20.0f);
-
-	RootComponent = CollisionSphere;
+	//CollisionSphere->SetCollisionProfileName(TEXT("Pawn"));
+	//RootComponent = CollisionSphere; 
+	
+	 
+	 
 
 	ProjectileMovement =
 		CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
 	ProjectileMovement->UpdatedComponent = CollisionSphere;
-	ProjectileMovement->InitialSpeed = 10000.0f;
-	ProjectileMovement->MaxSpeed = 10000.0f;
+	ProjectileMovement->InitialSpeed = 3000.0f;
+	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
 	InitialLifeSpan = 3.0f;
 
 }
+
+
+
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
@@ -48,8 +59,11 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
+	if(GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Damage To Enemy"));
+
 	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
-	if (Enemy) 
+	if (Enemy)
 	{
 		Enemy->DealDamage(DamageValue);
 
@@ -58,4 +72,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 
 
 }
+
+
+
 
